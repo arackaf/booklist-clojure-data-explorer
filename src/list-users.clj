@@ -24,7 +24,7 @@
   (let [active-users (active-users)
         user-counts (users-book-counts)
         user-count-lookup (reduce (fn [hash user-obj] (assoc hash (:_id user-obj) (:count user-obj))) {} user-counts)]
-    (map (fn [user] (assoc user :count (let [count (get user-count-lookup (:_id user))] (if (nil? count) 0 count)))) active-users)))
+    (map (fn [user] (assoc user :count (get user-count-lookup (:_id user) 0))) active-users)))
 
 (user-book-usage)
 

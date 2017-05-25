@@ -1,10 +1,10 @@
-(ns my.service.server
+(ns list-users
   (:require [monger.core :as mg] [monger.collection :as mc] [monger.operators :refer :all])
   (:import [com.mongodb MongoOptions ServerAddress]))
 
 
-(load-file "src/private/connection-string.clj")
-(load-file "src/cb-core.clj")
+(load-file "src/constants.clj")
+(load-file "src/db_core.clj")
 
 
 (defn normalize-db-object [obj]

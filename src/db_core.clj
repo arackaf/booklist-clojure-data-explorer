@@ -2,7 +2,7 @@
   (:require [monger.core :as mg] [monger.collection :as mc] [monger.operators :refer :all])
   (:import [com.mongodb MongoOptions ServerAddress]))
 
-(load-file "src/private/connection-string.clj")
+(load-file "src/constants.clj")
 
 
 (defn mongo-connect []

@@ -1,4 +1,7 @@
-(ns list-users
+(ns users.user-data
+  (:gen-class
+    :name booklist.util
+    :methods [#^{:static true} [userBookUsage [] "[Ljava.lang.Object;"]])
   (:require [monger.core :as mg] [monger.collection :as mc] [monger.operators :refer :all])
   (:import [com.mongodb MongoOptions ServerAddress]))
 
@@ -20,13 +23,13 @@
           {$group {:_id "$userId" :count { $sum 1 }}}
         ]))))
 
-(defn user-book-usage []
-  (let [active-users (active-users)
-        user-counts (users-book-counts)
-        user-count-lookup (reduce (fn [hash user-obj] (assoc hash (:_id user-obj) (:count user-obj))) {} user-counts)]
-    (map (fn [user] (assoc user :count (get user-count-lookup (:_id user) 0))) active-users)))
+(defn -userBookUsage []
+  (let [active-users (future(active-users))
+        user-counts (future (users-book-counts))
+        user-count-lookup (reduce (fn [hash user-obj] (assoc hash (:_id user-obj) (:count user-obj))) {} @user-counts)]
+    (map (fn [user] (assoc user :count (get user-count-lookup (:_id user) 0))) @active-users)))
 
-(user-book-usage)
+(-userBookUsage)
 
 
 
@@ -37,7 +40,7 @@
     (reduce (fn [hash user-obj] (assoc hash (keyword (:_id user-obj)) (:count user-obj))) {} user-counts)))
 
 
-;(doseq [grouping (users-book-counts)] (prn grouping))
+(doseq [grouping (users-book-counts)] (prn grouping))
 
 ;(let [map (user-book-count-lookup)]
 ;  (print "\n\n")
